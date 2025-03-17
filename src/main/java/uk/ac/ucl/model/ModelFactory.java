@@ -1,27 +1,27 @@
 package uk.ac.ucl.model;
 
-import java.io.File;
 import java.io.IOException;
 
-// This class gives access to the model to any other class that needs it.
-// Calling the static method getModel (i.e., ModelFactory.getModel()) returns
-// an initialised Model object. This version limits the program to one model object,
-// which is returned whenever getModel is called.
-// The factory also illustrates how a data file can be passed to the model.
-
-public class ModelFactory
-{
+/**
+ * Factory class to provide a singleton instance of the Model.
+ */
+public class ModelFactory {
   private static Model model;
+  private static final String DATA_DIR = "data";
 
-  public static Model getModel() throws IOException
-  {
-    if (model == null)
-    {
+  /**
+   * Gets the singleton instance of the Model.
+   *
+   * @return The Model instance
+   * @throws IOException If there is an error initializing the Model
+   */
+  public static Model getModel() throws IOException {
+    if (model == null) {
       model = new Model();
-      // Note where the data file is stored in the data directory,
-      // and the pathname to locate it.
-      // The data should be read the file once, not every time the model is accessed!
-      model.readFile("data/patients100.csv");
+
+      // Initialize the model with a JSON storage
+      JsonNoteStorage storage = new JsonNoteStorage(DATA_DIR);
+      model.initialize(storage);
     }
     return model;
   }

@@ -2,21 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Patient Data</title>
+  <title>Notes Application</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+    }
+    h2 {
+      margin-top: 0;
+      color: #007bff;
+    }
+    p {
+      margin-bottom: 15px;
+    }
+    .button {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      padding: 10px 15px;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+    .button:hover {
+      background-color: #0056b3;
+    }
+    footer {
+      margin-top: 40px;
+      padding-top: 10px;
+      border-top: 1px solid #eee;
+      color: #777;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 <body>
-<h2>Welcome to the Patient Data App</h2>
+<h1>Welcome to the Notes Application</h1>
 
-<nav>
-  <ul>
-    <li>
-      <a href="patientList.html">View the Patient ID List</a>
-    </li>
-    <li>
-      <a href="search.html">Search</a>
-    </li>
-  </ul>
-</nav>
+<div class="card">
+  <h2>My Notes</h2>
+  <p>Access your collection of notes, organized by categories.</p>
+  <a href="notes.html" class="button">View Notes</a>
+</div>
 
+<div class="card">
+  <h2>Create New Note</h2>
+  <p>Create a new text note or URL bookmark.</p>
+  <a href="createNote.html?type=TEXT" class="button">Text Note</a>
+  <a href="createNote.html?type=URL" class="button">URL Note</a>
+</div>
+
+<div class="card">
+  <h2>Search</h2>
+  <p>Search through all your notes by keyword.</p>
+  <a href="searchNotes.html" class="button">Search Notes</a>
+</div>
+
+<div class="card">
+  <h2>Categories</h2>
+  <p>Manage your note categories.</p>
+  <a href="manageCategories.html" class="button">Manage Categories</a>
+</div>
+
+<footer>
+  COMP0004 Java Web Application
+</footer>
 </body>
 </html>

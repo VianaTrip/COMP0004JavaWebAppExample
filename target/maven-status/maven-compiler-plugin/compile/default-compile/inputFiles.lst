@@ -1,0 +1,16 @@
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/main/Main.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/model/Category.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/model/JsonNoteStorage.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/model/Model.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/model/ModelFactory.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/model/Note.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/model/NoteIndex.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/model/NoteStorage.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/model/TextNote.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/model/URLNote.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/servlets/CreateNoteServlet.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/servlets/SearchNotesServlet.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/servlets/SearchServlet.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/servlets/ViewNoteServlet.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/servlets/ViewNotesServlet.java
+/Users/pedroviana/NotesWebApp/src/main/java/uk/ac/ucl/servlets/ViewPatientListServlet.java
