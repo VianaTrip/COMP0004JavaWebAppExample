@@ -4,9 +4,25 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
 
-  <display-name>MoonShot</display-name>
+  <display-name>Notes Application</display-name>
   <description>
-    MoonShot on the Web
+    Notes Application for COMP0004 Coursework
   </description>
+
+  <!-- Configure multipart requests for image uploads -->
+  <servlet>
+    <servlet-name>UploadImageServlet</servlet-name>
+    <servlet-class>uk.ac.ucl.servlets.UploadImageServlet</servlet-class>
+    <multipart-config>
+      <max-file-size>10485760</max-file-size> <!-- 10MB -->
+      <max-request-size>20971520</max-request-size> <!-- 20MB -->
+      <file-size-threshold>5242880</file-size-threshold> <!-- 5MB -->
+    </multipart-config>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>UploadImageServlet</servlet-name>
+    <url-pattern>/uploadImage.html</url-pattern>
+  </servlet-mapping>
 
 </web-app>

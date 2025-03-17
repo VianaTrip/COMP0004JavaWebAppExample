@@ -6,7 +6,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%@ page import="uk.ac.ucl.model.ImageNote" %>
 <html>
 <head>
     <jsp:include page="/meta.jsp"/>
@@ -107,6 +107,18 @@
                     <% if (!((URLNote) note).getDescription().isEmpty()) { %>
                         <div class="description">
                             <%= ((URLNote) note).getDescription().replace("\n", "<br>") %>
+                        </div>
+                    <% } %>
+                </div>
+            <% } else if (note instanceof ImageNote) {
+                ImageNote imageNote = (ImageNote) note;
+            %>
+                <div class="image-note">
+                    <img src="getImage.html?path=<%= imageNote.getImagePath() %>" alt="<%= note.getTitle() %>"
+                         style="max-width: 100%; max-height: 500px;">
+                    <% if (!imageNote.getCaption().isEmpty()) { %>
+                        <div class="caption" style="margin-top: 10px; font-style: italic;">
+                            <%= imageNote.getCaption().replace("\n", "<br>") %>
                         </div>
                     <% } %>
                 </div>
