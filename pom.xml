@@ -111,11 +111,12 @@
       <artifactId>tomcat-jsp-api</artifactId>
       <version>${tomcat.version}</version>
     </dependency>
+    <!-- Change scope from 'provided' to 'compile' to make sure it's available at runtime -->
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
       <version>6.1.0</version>
-      <scope>provided</scope>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>

@@ -35,7 +35,12 @@ public class EditNoteServlet extends HttpServlet {
 
         request.setAttribute("note", note);
         request.setAttribute("categories", model.getAllCategories());
-        request.setAttribute("noteCategories", model.getCategoriesForNote(noteId));
+
+        // Get categories this note belongs to
+        List<Category> noteCategories = model.getAllCategories().stream()
+                .filter(category -> category.containsNote(noteId))
+                .toList();
+        request.setAttribute("noteCategories", noteCategories);
 
         ServletContext context = getServletContext();
         RequestDispatcher dispatch = context.getRequestDispatcher("/editNote.jsp");
@@ -47,9 +52,8 @@ public class EditNoteServlet extends HttpServlet {
             throws ServletException, IOException {
         String noteId = request.getParameter("id");
         String title = request.getParameter("title");
-        String type = request.getParameter("type");
 
-        if (noteId == null || noteId.isEmpty() || title == null || title.isEmpty()) {
+        if (noteId == null || noteId.isEmpty() || title == null || title.trim().isEmpty()) {
             response.sendRedirect("notes.html");
             return;
         }
@@ -62,37 +66,36 @@ public class EditNoteServlet extends HttpServlet {
             return;
         }
 
-        boolean updated = false;
-
-        if ("URL".equals(type)) {
+        // Update the note based on its type
+        if (note instanceof TextNote) {
+            String text = request.getParameter("text");
+            model.updateTextNote(noteId, title, text);
+        } else if (note instanceof URLNote) {
             String url = request.getParameter("url");
             String description = request.getParameter("description");
 
-            if (url != null && !url.isEmpty()) {
-                updated = model.updateURLNote(noteId, title, url, description);
+            if (url == null || url.trim().isEmpty()) {
+                request.setAttribute("error", "URL cannot be empty");
+                doGet(request, response);
+                return;
             }
-        } else if ("TEXT".equals(type)) {
-            String text = request.getParameter("text");
-            updated = model.updateTextNote(noteId, title, text);
-        } else if ("IMAGE".equals(type)) {
-            // Handle image note update if you implement ImageNote class
-            // Currently not implemented in the base model
+
+            model.updateURLNote(noteId, title, url, description);
         }
 
-        if (updated) {
-            // Update category assignments
-            // First, remove note from all categories
-            List<Category> allCategories = model.getAllCategories();
-            for (Category category : allCategories) {
+        // Update category assignments
+        // First remove from all categories
+        for (Category category : model.getAllCategories()) {
+            if (category.containsNote(noteId)) {
                 model.removeNoteFromCategory(noteId, category.getId());
             }
+        }
 
-            // Then, add to selected categories
-            String[] categoryIds = request.getParameterValues("categories");
-            if (categoryIds != null) {
-                for (String categoryId : categoryIds) {
-                    model.addNoteToCategory(noteId, categoryId);
-                }
+        // Then add to selected categories
+        String[] categoryIds = request.getParameterValues("categories");
+        if (categoryIds != null) {
+            for (String categoryId : categoryIds) {
+                model.addNoteToCategory(noteId, categoryId);
             }
         }
 
