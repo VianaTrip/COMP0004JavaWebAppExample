@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
 
-  <display-name>Notes Application</display-name>
+  <display-name>Notes Web App</display-name>
   <description>
-    Notes Application for COMP0004 Coursework
+    Notes Web Application
   </description>
 
-  <!-- Configure multipart requests for image uploads -->
+  <!-- Define your servlets here if needed -->
   <servlet>
     <servlet-name>UploadImageServlet</servlet-name>
     <servlet-class>uk.ac.ucl.servlets.UploadImageServlet</servlet-class>
@@ -20,9 +20,9 @@
     </multipart-config>
   </servlet>
 
+  <!-- Define servlet mappings if needed -->
   <servlet-mapping>
     <servlet-name>UploadImageServlet</servlet-name>
     <url-pattern>/uploadImage.html</url-pattern>
   </servlet-mapping>
-
 </web-app>

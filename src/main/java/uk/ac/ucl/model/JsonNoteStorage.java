@@ -76,12 +76,10 @@ public class JsonNoteStorage implements NoteStorage {
             URLNote urlNote = (URLNote) note;
             noteJson.put("url", urlNote.getUrl());
             noteJson.put("description", urlNote.getDescription());
-        }
-
-        else if (note instanceof ImageNote) {
+        } else if (note instanceof ImageNote) {
             ImageNote imageNote = (ImageNote) note;
             noteJson.put("imagePath", imageNote.getImagePath());
-            noteJson.put("caption", imageNote.getCaption());
+            noteJson.put("description", imageNote.getDescription());
         }
 
         objectMapper.writeValue(new File(fileName), noteJson);
@@ -132,12 +130,12 @@ public class JsonNoteStorage implements NoteStorage {
                     String url = (String) noteData.get("url");
                     String description = (String) noteData.get("description");
                     note = new URLNote(id, title, url, description, createdAt, updatedAt);
-                }
-                else if ("IMAGE".equals(type)) {
+                } else if ("IMAGE".equals(type)) {
                     String imagePath = (String) noteData.get("imagePath");
-                    String caption = (String) noteData.get("caption");
-                    note = new ImageNote(id, title, imagePath, caption, createdAt, updatedAt);
+                    String description = (String) noteData.get("description");
+                    note = new ImageNote(id, title, imagePath, description, createdAt, updatedAt);
                 }
+
                 if (note != null) {
                     notes.add(note);
                 }

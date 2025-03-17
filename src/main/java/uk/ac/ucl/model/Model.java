@@ -79,6 +79,22 @@ public class Model {
   }
 
   /**
+   * Creates a new image note.
+   *
+   * @param title The title of the note
+   * @param imagePath The path to the stored image
+   * @param description An optional description
+   * @return The created note
+   * @throws IOException If there is an error saving the note
+   */
+  public ImageNote createImageNote(String title, String imagePath, String description) throws IOException {
+    ImageNote note = new ImageNote(title, imagePath, description);
+    noteIndex.addNote(note);
+    storage.saveNote(note);
+    return note;
+  }
+
+  /**
    * Gets a note by its ID.
    *
    * @param noteId The ID of the note to get
@@ -133,6 +149,31 @@ public class Model {
     urlNote.setDescription(description);
 
     storage.saveNote(urlNote);
+    return true;
+  }
+
+  /**
+   * Updates an image note.
+   *
+   * @param noteId The ID of the note to update
+   * @param title The new title
+   * @param imagePath The new image path
+   * @param description The new description
+   * @return true if the note was updated, false if the note doesn't exist or isn't an ImageNote
+   * @throws IOException If there is an error saving the note
+   */
+  public boolean updateImageNote(String noteId, String title, String imagePath, String description) throws IOException {
+    Note note = noteIndex.getNote(noteId);
+    if (note == null || !(note instanceof ImageNote)) {
+      return false;
+    }
+
+    ImageNote imageNote = (ImageNote) note;
+    imageNote.setTitle(title);
+    imageNote.setImagePath(imagePath);
+    imageNote.setDescription(description);
+
+    storage.saveNote(imageNote);
     return true;
   }
 
@@ -303,6 +344,16 @@ public class Model {
    */
   public List<Note> getNotesInCategory(String categoryId) {
     return noteIndex.getNotesInCategory(categoryId);
+  }
+
+  /**
+   * Gets the categories that a note belongs to.
+   *
+   * @param noteId The ID of the note
+   * @return List of categories the note belongs to
+   */
+  public List<Category> getCategoriesForNote(String noteId) {
+    return noteIndex.getCategoriesForNote(noteId);
   }
 
   /**

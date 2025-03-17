@@ -20,8 +20,14 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @WebServlet("/uploadImage.html")
-@MultipartConfig
+@MultipartConfig(
+        maxFileSize = 10485760,  // 10MB
+        maxRequestSize = 20971520,  // 20MB
+        fileSizeThreshold = 5242880  // 5MB
+)
 public class UploadImageServlet extends HttpServlet {
+    // Rest of your servlet code
+
 
     private static final String IMAGES_DIR = "data/images";
 

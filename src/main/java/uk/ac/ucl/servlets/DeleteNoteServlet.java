@@ -16,17 +16,16 @@ public class DeleteNoteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Get the ID of the note to delete
         String noteId = request.getParameter("id");
 
-        if (noteId == null || noteId.isEmpty()) {
-            response.sendRedirect("notes.html");
-            return;
+        if (noteId != null && !noteId.isEmpty()) {
+            // Delete the note using the model
+            Model model = ModelFactory.getModel();
+            model.deleteNote(noteId);
         }
 
-        Model model = ModelFactory.getModel();
-        boolean deleted = model.deleteNote(noteId);
-
-        // Redirect to notes list regardless of whether deletion was successful
+        // Redirect back to the notes list
         response.sendRedirect("notes.html");
     }
 }

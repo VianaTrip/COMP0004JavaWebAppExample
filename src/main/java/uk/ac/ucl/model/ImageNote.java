@@ -3,23 +3,23 @@ package uk.ac.ucl.model;
 import java.time.LocalDateTime;
 
 /**
- * A note that stores a reference to an image with an optional caption.
+ * A note that contains an image reference and optional description.
  */
 public class ImageNote extends Note {
     private String imagePath;
-    private String caption;
+    private String description;
 
     /**
      * Creates a new image note.
      *
      * @param title The title for the note
-     * @param imagePath Path to the stored image
-     * @param caption An optional caption (can be null)
+     * @param imagePath The path to the image file
+     * @param description A description of the image
      */
-    public ImageNote(String title, String imagePath, String caption) {
+    public ImageNote(String title, String imagePath, String description) {
         super(title);
         this.imagePath = imagePath != null ? imagePath : "";
-        this.caption = caption != null ? caption : "";
+        this.description = description != null ? description : "";
     }
 
     /**
@@ -27,16 +27,16 @@ public class ImageNote extends Note {
      *
      * @param id The note's unique identifier
      * @param title The title for the note
-     * @param imagePath Path to the stored image
-     * @param caption An optional caption
+     * @param imagePath The path to the image file
+     * @param description A description of the image
      * @param createdAt When the note was created
      * @param updatedAt When the note was last updated
      */
-    public ImageNote(String id, String title, String imagePath, String caption,
+    public ImageNote(String id, String title, String imagePath, String description,
                      LocalDateTime createdAt, LocalDateTime updatedAt) {
         super(id, title, createdAt, updatedAt);
         this.imagePath = imagePath != null ? imagePath : "";
-        this.caption = caption != null ? caption : "";
+        this.description = description != null ? description : "";
     }
 
     public String getImagePath() {
@@ -48,23 +48,23 @@ public class ImageNote extends Note {
         updateTimestamp();
     }
 
-    public String getCaption() {
-        return caption;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCaption(String caption) {
-        this.caption = caption != null ? caption : "";
+    public void setDescription(String description) {
+        this.description = description != null ? description : "";
         updateTimestamp();
     }
 
     @Override
     public String getContent() {
-        return imagePath + (caption.isEmpty() ? "" : "\n\n" + caption);
+        return imagePath + (description.isEmpty() ? "" : "\n\n" + description);
     }
 
     @Override
     public String getSearchableText() {
-        return caption; // Since image path isn't really searchable text
+        return description;
     }
 
     @Override

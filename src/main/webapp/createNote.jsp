@@ -19,7 +19,7 @@
             margin-bottom: 5px;
             font-weight: bold;
         }
-        input[type="text"], textarea, select {
+        input[type="text"], textarea {
             width: 100%;
             padding: 8px;
             border: 1px solid #ddd;
@@ -28,7 +28,6 @@
         }
         textarea {
             min-height: 200px;
-            resize: vertical;
         }
         .button {
             display: inline-block;
@@ -39,43 +38,10 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
         }
         .button-secondary {
             background-color: #6c757d;
-        }
-        .tab-container {
-            margin-bottom: 20px;
-        }
-        .tab {
-            display: inline-block;
-            padding: 10px 15px;
-            background-color: #f8f9fa;
-            cursor: pointer;
-            border: 1px solid #ddd;
-            border-bottom: none;
-            border-radius: 4px 4px 0 0;
-        }
-        .tab.active {
-            background-color: #fff;
-            border-bottom: 1px solid #fff;
-            margin-bottom: -1px;
-            position: relative;
-            z-index: 1;
-        }
-        .tab-content {
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 0 0 4px 4px;
-        }
-        .category-options {
-            max-height: 150px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 4px;
-        }
-        .category-option {
-            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -84,81 +50,72 @@
 <div class="main">
     <h1>Create New Note</h1>
 
-    <%
-        String noteType = (String) request.getAttribute("noteType");
-        List<Category> categories = (List<Category>) request.getAttribute("categories");
-
-        if (noteType == null) {
-            noteType = "TEXT";
-        }
-    %>
-
     <div class="form-container">
-        <div class="tab-container">
-            <a href="createNote.html?type=TEXT" class="tab <%= "TEXT".equals(noteType) ? "active" : "" %>">Text Note</a>
-            <a href="createNote.html?type=URL" class="tab <%= "URL".equals(noteType) ? "active" : "" %>">URL Note</a>
-            <a href="createNote.html?type=IMAGE" class="tab <%= "IMAGE".equals(noteType) ? "active" : "" %>">Image Note</a>
-        </div>
+        <% String noteType = (String) request.getAttribute("noteType"); %>
 
-        <div class="tab-content">
-            <form method="post" action="<%= "IMAGE".equals(noteType) ? "uploadImage.html" : "createNote.html" %>" enctype="<%= "IMAGE".equals(noteType) ? "multipart/form-data" : "application/x-www-form-urlencoded" %>">
-                <input type="hidden" name="type" value="<%= noteType %>">
+        <form method="post" action="createNote.html" <% if ("IMAGE".equals(noteType)) { %>enctype="multipart/form-data"<% } %>>
+            <input type="hidden" name="type" value="<%= noteType %>">
 
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+
+            <% if ("URL".equals(noteType)) { %>
+                <!-- URL Note specific fields -->
                 <div class="form-group">
-                    <label for="title">Title:</label>
-                    <input type="text" id="title" name="title" required>
+                    <label for="url">URL:</label>
+                    <input type="text" id="url" name="url" required>
                 </div>
 
-                <% if ("TEXT".equals(noteType)) { %>
-                    <div class="form-group">
-                        <label for="text">Content:</label>
-                        <textarea id="text" name="text"></textarea>
-                    </div>
-                <% } else if ("URL".equals(noteType)) { %>
-                    <div class="form-group">
-                        <label for="url">URL:</label>
-                        <input type="text" id="url" name="url" required>
-                    </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description"></textarea>
+                </div>
+            <% } else if ("IMAGE".equals(noteType)) { %>
+                <!-- Image Note specific fields -->
+                <div class="form-group">
+                    <label for="image">Image:</label>
+                    <input type="file" id="image" name="image" accept="image/*" required>
+                </div>
 
-                    <div class="form-group">
-                        <label for="description">Description:</label>
-                        <textarea id="description" name="description"></textarea>
-                    </div>
-                <% } else if ("IMAGE".equals(noteType)) { %>
-                    <div class="form-group">
-                        <label for="imageFile">Image File:</label>
-                        <input type="file" id="imageFile" name="imageFile" accept="image/*" required>
-                    </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description"></textarea>
+                </div>
+            <% } else { %>
+                <!-- Text Note specific fields -->
+                <div class="form-group">
+                    <label for="text">Content:</label>
+                    <textarea id="text" name="text"></textarea>
+                </div>
+            <% } %>
 
-                    <div class="form-group">
-                        <label for="imageCaption">Caption:</label>
-                        <textarea id="imageCaption" name="imageCaption"></textarea>
-                    </div>
+            <!-- Category selection -->
+            <div class="form-group">
+                <label>Categories:</label>
+                <%
+                    List<Category> categories = (List<Category>) request.getAttribute("categories");
+                    if (categories != null && !categories.isEmpty()) {
+                        for (Category category : categories) {
+                %>
+                <div>
+                    <input type="checkbox" id="category-<%= category.getId() %>" name="categories" value="<%= category.getId() %>">
+                    <label for="category-<%= category.getId() %>"><%= category.getName() %></label>
+                </div>
+                <%
+                        }
+                    } else {
+                %>
+                <p>No categories available. <a href="manageCategories.html">Create a category</a></p>
                 <% } %>
+            </div>
 
-                <div class="form-group">
-                    <label>Categories:</label>
-                    <div class="category-options">
-                        <% if (categories != null && !categories.isEmpty()) {
-                            for (Category category : categories) {
-                        %>
-                            <div class="category-option">
-                                <input type="checkbox" id="category-<%= category.getId() %>"
-                                       name="categories" value="<%= category.getId() %>">
-                                <label for="category-<%= category.getId() %>"><%= category.getName() %></label>
-                            </div>
-                        <% } } else { %>
-                            <p>No categories available. <a href="manageCategories.html">Create some categories</a>.</p>
-                        <% } %>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <button type="submit" class="button">Create Note</button>
-                    <a href="notes.html" class="button button-secondary">Cancel</a>
-                </div>
-            </form>
-        </div>
+            <div class="form-group">
+                <button type="submit" class="button">Create Note</button>
+                <a href="notes.html" class="button button-secondary">Cancel</a>
+            </div>
+        </form>
     </div>
 </div>
 <jsp:include page="/footer.jsp"/>

@@ -7,24 +7,28 @@
     <jsp:include page="/meta.jsp"/>
     <title>Manage Categories</title>
     <style>
-        .main-content {
-            max-width: 800px;
-            margin: 0 auto;
+        .category-list {
+            list-style-type: none;
+            padding: 0;
         }
-        .form-group {
-            margin-bottom: 15px;
+        .category-list li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
+        .category-name {
             font-weight: bold;
         }
-        input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+        .category-count {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .actions {
+            margin: 20px 0;
         }
         .button {
             display: inline-block;
@@ -35,32 +39,26 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin-right: 5px;
-        }
-        .button-secondary {
-            background-color: #6c757d;
+            font-size: 16px;
+            margin-right: 10px;
         }
         .button-delete {
             background-color: #dc3545;
         }
-        .category-list {
-            list-style-type: none;
-            padding: 0;
+        .create-form {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
         }
-        .category-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            margin-bottom: 10px;
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 300px;
             border: 1px solid #ddd;
             border-radius: 4px;
-        }
-        .category-info {
-            flex-grow: 1;
-        }
-        .category-actions {
-            display: flex;
         }
     </style>
 </head>
@@ -69,82 +67,46 @@
 <div class="main">
     <h1>Manage Categories</h1>
 
-    <div class="main-content">
-        <!-- Create new category form -->
+    <div class="create-form">
         <h2>Create New Category</h2>
-        <form method="post" action="manageCategories.html">
-            <input type="hidden" name="action" value="create">
+        <form method="post" action="createCategory.html">
             <div class="form-group">
                 <label for="categoryName">Category Name:</label>
                 <input type="text" id="categoryName" name="categoryName" required>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="button">Create Category</button>
-                <a href="notes.html" class="button button-secondary">Back to Notes</a>
+                <button type="submit" class="button">Create</button>
             </div>
         </form>
+    </div>
 
-        <hr>
-
-        <!-- List and manage existing categories -->
-        <h2>Existing Categories</h2>
-        <%
-            List<Category> categories = (List<Category>) request.getAttribute("categories");
-            if (categories != null && !categories.isEmpty()) {
-        %>
-            <ul class="category-list">
-                <% for (Category category : categories) { %>
-                    <li class="category-item">
-                        <div class="category-info">
-                            <h3><%= category.getName() %></h3>
-                            <p>Contains <%= category.getNoteCount() %> notes</p>
-                        </div>
-                        <div class="category-actions">
-                            <button type="button" class="button"
-                                    onclick="showEditForm('<%= category.getId() %>', '<%= category.getName() %>')">
-                                Edit
-                            </button>
-                            <form method="post" action="manageCategories.html"
-                                  onsubmit="return confirm('Are you sure you want to delete this category? Notes in this category will not be deleted.');">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="categoryId" value="<%= category.getId() %>">
-                                <button type="submit" class="button button-delete">Delete</button>
-                            </form>
-                        </div>
-                    </li>
-                <% } %>
-            </ul>
-
-            <!-- Hidden edit form that will be shown when clicking Edit -->
-            <div id="editFormContainer" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 4px;">
-                <h3>Edit Category</h3>
-                <form method="post" action="manageCategories.html">
-                    <input type="hidden" name="action" value="update">
-                    <input type="hidden" id="editCategoryId" name="categoryId" value="">
-                    <div class="form-group">
-                        <label for="editCategoryName">Category Name:</label>
-                        <input type="text" id="editCategoryName" name="categoryName" required>
+    <h2>Categories</h2>
+    <%
+        List<Category> categories = (List<Category>) request.getAttribute("categories");
+        if (categories != null && !categories.isEmpty()) {
+    %>
+        <ul class="category-list">
+            <% for (Category category : categories) { %>
+                <li>
+                    <div>
+                        <span class="category-name"><%= category.getName() %></span>
+                        <span class="category-count">(<%= category.getNoteCount() %> notes)</span>
                     </div>
-                    <div class="form-group">
-                        <button type="submit" class="button">Save Changes</button>
-                        <button type="button" class="button button-secondary"
-                                onclick="document.getElementById('editFormContainer').style.display='none'">
-                            Cancel
-                        </button>
+                    <div class="actions">
+                        <a href="notes.html?categoryId=<%= category.getId() %>" class="button">View Notes</a>
+                        <a href="deleteCategory.html?id=<%= category.getId() %>"
+                           class="button button-delete"
+                           onclick="return confirm('Are you sure you want to delete this category? Notes will not be deleted.')">
+                            Delete
+                        </a>
                     </div>
-                </form>
-            </div>
+                </li>
+            <% } %>
+        </ul>
+    <% } else { %>
+        <p>No categories exist yet. Create one using the form above.</p>
+    <% } %>
 
-            <script>
-                function showEditForm(categoryId, categoryName) {
-                    document.getElementById('editCategoryId').value = categoryId;
-                    document.getElementById('editCategoryName').value = categoryName;
-                    document.getElementById('editFormContainer').style.display = 'block';
-                }
-            </script>
-        <% } else { %>
-            <p>No categories have been created yet.</p>
-        <% } %>
+    <div class="actions">
+        <a href="notes.html" class="button">Back to Notes</a>
     </div>
 </div>
 <jsp:include page="/footer.jsp"/>
